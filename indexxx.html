@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Dodging Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: sans-serif;
+            background: #333;
+            color: white;
+        }
+        #gameArea {
+            width: 400px;
+            height: 600px;
+            margin: 20px auto;
+            background: #222;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid white;
+        }
+        .car {
+            width: 50px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            bottom: 10px;
+            left: 175px;
+            border-radius: 10px;
+        }
+        .enemy {
+            width: 50px;
+            height: 100px;
+            background: yellow;
+            position: absolute;
+            top: -120px;
+            left: 175px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="gameArea">
+    <div class="car" id="playerCar"></div>
+    <div class="enemy" id="enemyCar"></div>
+</div>
+
+<script>
+    const gameArea = document.getElementById('gameArea');
+    const playerCar = document.getElementById('playerCar');
+    const enemyCar = document.getElementById('enemyCar');
+
+    let playerLeft = 175;
+    let enemyTop = -120;
+    let enemyLeft = Math.floor(Math.random() * 3) * 100 + 50;
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' && playerLeft > 0) {
+            playerLeft -= 100;
+            playerCar.style.left = playerLeft + 'px';
+        } else if (e.key === 'ArrowRight' && playerLeft < 350) {
+            playerLeft += 100;
+            playerCar.style.left = playerLeft + 'px';
+        }
+    });
+
+    function gameLoop() {
+        enemyTop += 5;
+        enemyCar.style.top = enemyTop + 'px';
+
+        if (enemyTop > 600) {
+            enemyTop = -120;
+            enemyLeft = Math.floor(Math.random() * 4) * 100;
+            enemyCar.style.left = enemyLeft + 'px';
+        }
+
+        if (
+            enemyTop + 100 >= 500 &&
+            playerLeft < enemyLeft + 50 &&
+            playerLeft + 50 > enemyLeft
+        ) {
+            alert('Game Over!');
+            window.location.reload();
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    enemyCar.style.left = enemyLeft + 'px';
+    gameLoop();
+</script>
+
+</body>
+</html>
